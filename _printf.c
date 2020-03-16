@@ -82,3 +82,4 @@ void valuespecial(char caracter)
                 }
         }
 }
+´´´´
