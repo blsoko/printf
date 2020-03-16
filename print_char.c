@@ -1,3 +1,5 @@
+#include "holberton.h"
+
 /**
  * print_char - function that prints a char.
  *

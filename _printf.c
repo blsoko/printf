@@ -1,5 +1,56 @@
 #include "holberton.h"
 
+void percent_func(const char *format, unsigned int *i, va_list list)/* %, %%, %c, %s. */
+{
+	unsigned int j = 0; /*structure iterator*/
+  
+  	op_t fstruct[] = {
+                {'s', print_string},
+                {'c', print_char},
+                {'\0', NULL}
+        };
+  
+  	i++; /* point to the position next to the percent symbol position. */
+  	if (format[*i] == '%')
+        	_putchar('%');
+  	else
+        {
+                while(fstruct[j].c != '\0') /*structrure elements iterator*/
+                { 
+                  	if (format[*i] == fstruct[j].c)
+                        	{
+                          		(fstruct[j].f)(list);
+                          		break;
+                        	}
+			j++;
+                }
+        }
+}
+
+void backslash_func(const char *format, unsigned int *i) /* \\, \a, \b, \f, \n, \r, \t, \v.*/
+{
+  	char *spec_cases  = "abfnrtv";
+  	char  spec_char[] = {'\a', '\b', '\f', '\n', '\r', '\t', '\v'};
+  	int j = 0;
+  	int special_deteced = 0; /*will say if there is a special character*/
+  
+  	i++; /*point to the position next to the backslash symbol position.*/
+  	while(j < 7) /*in charge of verify special cases*/
+        {
+        	if (format[*i] == spec_cases[j])
+                {
+                  	_putchar(spec_char[j]);
+                  	special_detected = 1;
+                  	break;
+                }
+        }
+  	if (special_detected == 0)
+          	_putchar(format[*i]);
+        format[*i] == '\\'
+                _putchar('\\');
+}       
+
+
 /**
  * _printf - selector function option
  *
@@ -9,76 +60,29 @@
  */
 
 int _printf(const char *format, ...)
-{
-        unsigned long int j = 0;
-        int i = 0;
-        va_list record; /* type data to use in our structure*/
+{	
+  	unsigned int i = 0; /*format index iterator*/ 
 
-        S_convertion farray[] = {
-                {"s", print_string}
-                {"c", print_character}
-                {"d", print_decimal}
-                {NULL, NULL}
-        }
+ 	va_list list;
+        va_start(list, format);
 
-        va_start(record, format);
-        while (format && format[j])
+	while(format != NULL && format[i] != '\0') /*format iterator*/
         {
-                while (farray[i].c[0] != NULL)
+          	if (format[i] == '\\')
                 {
-                        if(format[j] != '\\' )
-                        {
-                                
-                                if ((farray[i].c[0] == (format[j + 1] != '\0')) && format[j] == %) /* verify %option */
-                                {
-                                        (farray[i].f)(record);
-                                }
-                                else
-                                {
-                                        print_word(format[j]);
-                                }
-                        }
-                        else
-                        {
-                                valuespecial(format[j + 1]);
-                                j++;
-                        }
-                        i++;
+                  backslash_func(format, &i);
                 }
-                j++;
-                i = 0;
-        }
-}
-
-/**
- * valuespecial - check special character '\'
- *
- * @caracter: format[j + 1] value 
- *
- * Return: A value
- */
-void valuespecial(char caracter)
-{
-        char narray[] = {'\\', '?', '"', '0'}
-        int i = 0;
-        if (caracter == 'n')
-        {
-                _putchar('\n');
-        }
-        else if (carater == 't')
-        {
-                while(i < 4)
+          	else if(format[i] == '%')
                 {
-                        _putchar(" ");
-                        i++;
+                  percent_func(format, &i, list);
                 }
-        }
-
-        for (i = 0; narray[i] != '0'; i++)
-        {
-                if (narray[i] == caracter)
+      		else
                 {
-                        _putchar(narray[i]);
+                  _putchar(format[i]);
                 }
-        }
+          	i++;
+        } 	
+  
+  	va_end(list);
+       
 }
