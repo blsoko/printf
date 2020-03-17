@@ -13,8 +13,8 @@ void percent_func(const char *format, unsigned int *i, int *byte, va_list list)
 {/* %%, %c, %s.*/
 	unsigned int j = 0; /*structure iterator*/
 	int special_detected = 0;
-	S_conversion fstruct[] = {{'s', print_string},
-		{'c', print_char}, {'\0', NULL}};
+	S_conversion fstruct[] = {{'s', print_string}, {'c', print_char},
+	{'d', print_integer}, {'i', print_integerofi}, {'\0', NULL}};
 
 	(*i)++; /*point to the position next to the percent symbol position.*/
 	while (fstruct[j].c != '\0') /*structrure elements iterator*/
