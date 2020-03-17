@@ -5,54 +5,23 @@
  *
  * @format: format to print.
  * @i: pointer to the format index.
+ * @byte: bytes printed.
  * @list: list of parameters.
  */
 
-void percent_func(const char *format, unsigned int *i, va_list list)
-{/*%, %%, %c, %s.*/ /* %\0 */
+void percent_func(const char *format, unsigned int *i, int *byte, va_list list)
+{/* %%, %c, %s.*/
 	unsigned int j = 0; /*structure iterator*/
-
+	int special_detected = 0;
 	S_conversion fstruct[] = {{'s', print_string},
 		{'c', print_char}, {'d', print_integer}, {'i', print_integerofi}, {'\0', NULL}};
 
 	(*i)++; /*point to the position next to the percent symbol position.*/
-	if (format[*i] == '%')
-		_putchar('%');
-	else
+	while (fstruct[j].c != '\0') /*structrure elements iterator*/
 	{
-		while (fstruct[j].c != '\0') /*structrure elements iterator*/
+		if (format[*i] == fstruct[j].c)
 		{
-			if (format[*i] == fstruct[j].c)
-			{
-				(fstruct[j].f)(list);
-				break;
-			}
-			j++;
-		}
-	}
-}
-
-/**
- * backslash_func - evaluates caracteres after \.
- *
- * @format: format to print.
- * @i: pointer to the format index.
- */
-
-void backslash_func(const char *format, unsigned int *i)
-{/* \\, \a, \b, \f, \n, \r, \t, \v.*/
-	char *spec_cases  = "abfnrtv";
-	char  spec_char[] = {'a', 'b', 'f', 'n', 'r', 't', 'v'};
-	int j = 0;
-	int special_detected = 0; /*will say if there is a special character*/
-
-	_putchar('\\');
-	(*i)++; /*point to the position next to the backslash symbol position.*/
-	while (j < 7) /*in charge of verify special cases*/
-	{
-		if (format[*i] == spec_cases[j])
-		{
-			_putchar(spec_char[j]);
+			(fstruct[j].f)(byte, list);
 			special_detected = 1;
 			break;
 		}
@@ -60,7 +29,13 @@ void backslash_func(const char *format, unsigned int *i)
 	}
 	if (special_detected == 0)
 	{
-		_putchar(format[*i]);
+		_putchar('%');
+		(*byte)++;
+		if (format[*i] != '%')
+		{
+			_putchar(format[*i]);
+			(*byte)++;
+		}
 	}
 }
 
@@ -73,28 +48,31 @@ void backslash_func(const char *format, unsigned int *i)
  */
 
 int _printf(const char *format, ...)
-{	/* "\\\\ ok\n" */
+{
 	unsigned int i = 0; /*format index iterator*/
+	int bytes_printed = 0;
 	va_list list;
 
+	/*printf("[[[[format:%s]]]]", format);*/
 	va_start(list, format);
 	while (format != NULL && format[i] != '\0') /*format iterator*/
 	{
-		if (format[i] == '\\')
+		if (format[i] == '%')
 		{
-			backslash_func(format, &i);
-		}
-		else if (format[i] == '%')
-		{
-			percent_func(format, &i, list);
+			if (format[i + 1] == '\0')
+				return(-1);
+			percent_func(format, &i, &bytes_printed, list);
 		}
 		else
 		{
 			_putchar(format[i]);
+			bytes_printed++;
 		}
 		i++;
 	}
-
+	if (format == NULL)
+		bytes_printed = -1;
+		
 	va_end(list);
-	return (i);
+	return (bytes_printed);
 }
