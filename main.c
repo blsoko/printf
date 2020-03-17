@@ -74,4 +74,4 @@ int main(void)
 	_printf("word %b\n", 98);
 	/*printf("Expected %b\n", 98);*/
 	return (0);
-}
+][]
