@@ -5,10 +5,11 @@
  *
  * @format: format to print.
  * @i: pointer to the format index.
+ * @byte: bytes printed.
  * @list: list of parameters.
  */
 
-void percent_func(const char *format, unsigned int *i, va_list list)
+void percent_func(const char *format, unsigned int *i, int *byte, va_list list)
 {/* %%, %c, %s.*/
 	unsigned int j = 0; /*structure iterator*/
 	int special_detected = 0;
@@ -20,7 +21,7 @@ void percent_func(const char *format, unsigned int *i, va_list list)
 	{
 		if (format[*i] == fstruct[j].c)
 		{
-			(fstruct[j].f)(list);
+			(fstruct[j].f)(byte, list);
 			special_detected = 1;
 			break;
 		}
@@ -29,8 +30,12 @@ void percent_func(const char *format, unsigned int *i, va_list list)
 	if (special_detected == 0)
 	{
 		_putchar('%');
+		(*byte)++;
 		if (format[*i] != '%')
+		{
 			_putchar(format[*i]);
+			(*byte)++;
+		}
 	}
 }
 
@@ -45,6 +50,7 @@ void percent_func(const char *format, unsigned int *i, va_list list)
 int _printf(const char *format, ...)
 {
 	unsigned int i = 0; /*format index iterator*/
+	int bytes_printed = 0;
 	va_list list;
 
 	/*printf("[[[[format:%s]]]]", format);*/
@@ -53,15 +59,17 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
-			percent_func(format, &i, list);
+			percent_func(format, &i, &bytes_printed, list);
 		}
 		else
 		{
 			_putchar(format[i]);
+			bytes_printed++;
 		}
 		i++;
 	}
-
+	if (format == NULL)
+		bytes_printed = -1;
 	va_end(list);
-	return (i);
+	return (bytes_printed);
 }
