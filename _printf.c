@@ -59,6 +59,8 @@ int _printf(const char *format, ...)
 	{
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == '\0')
+				return(-1);
 			percent_func(format, &i, &bytes_printed, list);
 		}
 		else
@@ -70,6 +72,7 @@ int _printf(const char *format, ...)
 	}
 	if (format == NULL)
 		bytes_printed = -1;
+		
 	va_end(list);
 	return (bytes_printed);
 }
