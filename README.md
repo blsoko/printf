@@ -1,6 +1,6 @@
 C - printf
 
-GENERAL
+GENERAL INFORMATION
 
 Our function emulates the result that should print the function printf
 only with 'c' for character, 's' for string, 'd' for decimal, 'i' for
