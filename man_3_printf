@@ -1,0 +1,49 @@
+.TH man 3 "16 May 2010" "1.0" "_printf man page"
+.SH NAME
+.B _printf
+.SH SYNOPSIS
+.B #include "holberton.h"
+ void print_integer(va_list list);
+ void print_integerofi(va_list list);
+ void print_number(int n);
+ int _printf(const char *format, ...);
+ void print_string(va_list);
+ void print_char(va_list);
+ int _putchar(char c);
+.B #include <stdio.h>
+.B #include <stdarg.h>
+.B #include <stdlib.h>
+.SH DESCRIPTION
+_printf() handle the format specified by the user, and then print an output to stdout.
+.SH RETURN VALUE
+In a successful return, _printf() return the numbers of characters written (excluding the null), otherwise on a failure return a negative number.
+.SH FORMAT OF THE FORMAT STRING
+The _printf begin with double quotes and end with this, inside, you can print a variable or a number, just with the format of '%' and specify the option.
+.SH OPTIONS
+These options can be used after the percentil (%).
+.B Conversion specifier
+.TP
+.B d, i
+The int argument is converted to a signed decimal notation.
+.TP
+.B c
+The argument is converted into a unsigned char and the resulting character is written.
+.TP
+.B s
+It's a const char *argument that is a pointer of an array of characters, and print to the output. The return doesn't count character null.
+.TP
+.B %
+Print a percentil.
+.SH SEE ALSO
+printf(3)
+.SH BUGS
+No known bugs.
+.SH EXAMPLES
+#include "holberton.h"
+_printf("Hola %")
+_printf("Negative:[%d]", -762534);
+len = _printf("len %d hola", 1323333);
+len2 = printf("len %d hola", 1323333);
+_printf("Length:[%d, %i]", len, len2);
+.SH AUTHOR
+Jose Erney Giraldo Ortega, Edison Giraldo Aristizabal
